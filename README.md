@@ -32,7 +32,8 @@ npm run dev      # http://localhost:3000  (binds 0.0.0.0:3000)
 | Admin         | `/admin`      | Verify dietitians, fulfil orders, manage stock, pilot readiness        |
 
 All state lives in the browser (`localStorage`), so every flow can be walked end to end with no
-backend. **Profile → Reset demo data** restores the seed.
+backend. **Profile → Reset demo data** restores the seed. The app ships a web manifest, theme
+colour and an SVG app icon, so it can be installed to a home screen as a PWA.
 
 ---
 
@@ -168,8 +169,8 @@ npm test
   slots in the future, exactly one pending-verification dietitian (5 verified), order arithmetic,
   caseload/plan/notes present, deterministic output.
 
-`npm run typecheck` and `npm run build` are both clean; the production build prerenders 22 of 27
-routes and keeps first-load JS at ~123–131 kB.
+`npm run typecheck` and `npm run build` are both clean; the production build emits 30 routes (24 of
+them prerendered, including the web manifest and app icon) and keeps first-load JS at ~123–132 kB.
 
 ---
 

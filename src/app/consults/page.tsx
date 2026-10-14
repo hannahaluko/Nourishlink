@@ -41,7 +41,7 @@ export default function ConsultsPage() {
   const plan = mealPlans.find((p) => p.clientId === profile.id);
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[520px] px-[18px] pb-[132px]">
+    <div className="mx-auto min-h-screen w-full max-w-[520px] md:max-w-[760px] px-[18px] pb-[132px]">
       <header className="flex items-center gap-3 pt-5 pb-4">
         <div className="min-w-0 flex-1">
           <p className="text-[13px] text-muted">

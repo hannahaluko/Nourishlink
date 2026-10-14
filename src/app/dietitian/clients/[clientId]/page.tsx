@@ -51,7 +51,7 @@ export default function ClientRecordPage() {
 
   if (!client) {
     return (
-      <div className="mx-auto max-w-[520px] px-[18px] py-16 text-center">
+      <div className="mx-auto max-w-[520px] md:max-w-[760px] px-[18px] py-16 text-center">
         <p className="text-[15px] font-semibold">Client not found</p>
         <Link href="/dietitian" className="mt-3 inline-block text-[13px] font-semibold text-lime-dark">
           Back to caseload

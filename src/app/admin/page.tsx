@@ -36,7 +36,7 @@ export default function AdminOverview() {
   const lowStock = products.filter((p) => p.stock <= 12);
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[520px] px-[18px] pb-[132px]">
+    <div className="mx-auto min-h-screen w-full max-w-[520px] md:max-w-[880px] px-[18px] pb-[132px]">
       <header className="flex items-center gap-3 pt-5 pb-4">
         <IconTile tone="lime" size={44}>
           <IconGrid size={21} />
@@ -51,7 +51,7 @@ export default function AdminOverview() {
       </header>
 
       <div className="space-y-3">
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <StatTile
             label="Verified dietitians"
             value={`${verified.length}`}

@@ -96,7 +96,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[520px] px-[18px] pb-[132px]">
+    <div className="mx-auto min-h-screen w-full max-w-[520px] md:max-w-[720px] px-[18px] pb-[132px]">
       <header className="flex items-center gap-3 pt-5 pb-4">
         <Avatar name={profile.name} size={46} tone="lime" />
         <div className="min-w-0 flex-1">

@@ -161,12 +161,21 @@ function QuickAddSheet({
   onGlucose: () => void;
   onWater: () => void;
 }) {
+  const { push } = useToast();
   const quick = [
     { label: "Log a meal", icon: <IconFlame size={20} />, onClick: onMeal },
     { label: "Log glucose", icon: <IconDroplet size={20} />, onClick: onGlucose },
     { label: "Log water", icon: <IconDroplet size={20} />, onClick: onWater },
     { label: "Log weight", icon: <IconScale size={20} />, onClick: () => (window.location.href = "/track/weight") },
   ];
+  const scan = {
+    label: "Scan a barcode",
+    icon: <IconScan size={20} />,
+    onClick: () => {
+      push("Barcode scanning ships right after the pilot");
+      onClose();
+    },
+  };
   const staff = [
     { label: "Find a client", icon: <IconSearch size={20} />, onClick: () => (window.location.href = "/dietitian") },
     { label: "Write a session note", icon: <IconNote size={20} />, onClick: () => (window.location.href = "/dietitian") },
@@ -183,7 +192,7 @@ function QuickAddSheet({
           : "Shortcuts for your daily workflow."}
       </p>
       <div className="grid grid-cols-2 gap-3">
-        {actions.map((a) => (
+        {(role === "client" ? [...actions, scan] : actions).map((a) => (
           <button
             key={a.label}
             type="button"

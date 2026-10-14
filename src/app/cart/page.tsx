@@ -263,7 +263,7 @@ export default function CartPage() {
 
       {cartLines.length > 0 ? (
         <div className="fixed inset-x-0 bottom-[92px] z-30 px-[18px] md:bottom-[104px]">
-          <div className="mx-auto max-w-[484px]">
+          <div className="mx-auto max-w-[484px] md:max-w-[604px]">
             <button
               type="button"
               onClick={() => setPayOpen(true)}

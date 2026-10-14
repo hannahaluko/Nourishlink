@@ -53,7 +53,7 @@ export default function SchedulePage() {
   const potential = slotsOpen * fee;
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[520px] px-[18px] pb-[132px]">
+    <div className="mx-auto min-h-screen w-full max-w-[520px] md:max-w-[760px] px-[18px] pb-[132px]">
       <header className="flex items-center gap-3 pt-5 pb-4">
         <CircleButton label="Back" size={44} onClick={() => router.back()}>
           <IconBack size={20} />

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useStore } from "@/lib/store";
 import { greetingFor } from "@/lib/seed";
 import {
@@ -89,7 +89,9 @@ export default function ClientDashboard() {
     .sort((a, b) => b.placedAt.localeCompare(a.placedAt))[0];
   const plan = mealPlans.find((p) => p.clientId === profile.id);
 
-  const greeting = greetingFor(new Date().getHours());
+  /* Greeting depends on the viewer's clock — set after mount to keep SSR stable. */
+  const [greeting, setGreeting] = useState("Hello");
+  useEffect(() => setGreeting(greetingFor(new Date().getHours())), []);
 
   const met: { key: "steps" | "kcal" | "water" | "exerciseMin"; label: string; tone: "orange" | "amber" | "blue" | "teal" }[] = [
     { key: "steps", label: "Steps", tone: "orange" },

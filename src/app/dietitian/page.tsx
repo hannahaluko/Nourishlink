@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
+import { greetingFor } from "@/lib/seed";
 import { DEMO_DIETITIAN_ID } from "@/lib/seed";
 import { glucoseStatus, num, pct, prettyDate, prettyTime } from "@/lib/format";
 import { useToast } from "@/components/app-providers";
@@ -26,6 +28,8 @@ export default function DietitianDashboard() {
   const store = useStore();
   const { push } = useToast();
   const { clients, appointments, glucoseFor, mealsFor, notes, today, profile } = store;
+  const [greeting, setGreeting] = useState("Hello");
+  useEffect(() => setGreeting(greetingFor(new Date().getHours())), []);
   const me = store.dietitianById(DEMO_DIETITIAN_ID);
 
   const myClients = clients.filter((c) => c.id !== profile.id || store.clientById(c.id));
@@ -44,11 +48,11 @@ export default function DietitianDashboard() {
   };
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[520px] px-[18px] pb-[132px]">
+    <div className="mx-auto min-h-screen w-full max-w-[520px] md:max-w-[880px] px-[18px] pb-[132px]">
       <header className="flex items-center gap-3 pt-5 pb-4">
         <Avatar name={me?.name ?? "Dietitian"} size={46} tone="teal" />
         <div className="min-w-0 flex-1">
-          <p className="text-[13px] text-muted">Good morning,</p>
+          <p className="text-[13px] text-muted">{greeting},</p>
           <h1 className="truncate text-[17px] font-semibold">Dr. {me?.name.split(" ")[0]}</h1>
         </div>
         <CircleButton label="Notifications" href="/profile" size={44}>
@@ -74,7 +78,7 @@ export default function DietitianDashboard() {
           <Pill tone="teal">Active</Pill>
         </Card>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           <StatTile
             label="Active clients"
             value={`${clients.length}`}

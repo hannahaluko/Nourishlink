@@ -49,7 +49,7 @@ export default function ShopPage() {
   }, [products, profile]);
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[520px] px-[18px] pb-[132px]">
+    <div className="mx-auto min-h-screen w-full max-w-[520px] md:max-w-[880px] px-[18px] pb-[132px]">
       <header className="flex items-center gap-3 pt-5 pb-4">
         <div className="min-w-0 flex-1">
           <p className="text-[13px] text-muted">Healthy food shop</p>
@@ -139,7 +139,7 @@ export default function ShopPage() {
           <p className="text-[12px] text-muted">Free delivery over ₦25,000</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
           {results.map((p) => (
             <Card key={p.id} className="flex flex-col p-3">
               <Link href={`/shop/${p.id}`} className="press flex-1">
