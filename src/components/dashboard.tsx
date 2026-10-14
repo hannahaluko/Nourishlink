@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import {
-  addDays,
   dayLetter,
   dayNumber,
-  dayShort,
   num,
   pct,
   prettyDate,
@@ -17,7 +15,6 @@ import type { DailyMetric, MealLog } from "@/lib/types";
 import { useStore } from "@/lib/store";
 import { useToast } from "./app-providers";
 import {
-  BarChart,
   BarSparkline,
   Card,
   CircleButton,
@@ -28,7 +25,6 @@ import {
   ProgressRing,
   SectionHeader,
   StatTile,
-  Value,
   type Tone,
 } from "./ui";
 import {
@@ -161,57 +157,6 @@ export function HeroProgressCard({
           track="rgba(255,255,255,0.7)"
         />
       </div>
-    </Card>
-  );
-}
-
-/* --------------------------- weekly chart card --------------------------- */
-
-export function WeeklyBarsCard({
-  metrics,
-  selected,
-  onSelect,
-  metric = "steps",
-  title,
-  href,
-}: {
-  metrics: DailyMetric[];
-  selected: string;
-  onSelect: (iso: string) => void;
-  metric?: "steps" | "kcal" | "exerciseMin" | "water";
-  title: string;
-  href?: string;
-}) {
-  const targetKey = (
-    { steps: "stepsTarget", kcal: "kcalTarget", exerciseMin: "exerciseTarget", water: "waterTarget" } as const
-  )[metric];
-
-  return (
-    <Card className="p-4">
-      <div className="mb-1 flex items-start justify-between">
-        <div>
-          <h2 className="text-[16px] font-semibold">{title}</h2>
-          <p className="mt-0.5 text-[12px] text-muted">
-            {prettyDate(selected)} · target {num(metrics.find((m) => m.date === selected)?.[targetKey] ?? 0)}
-          </p>
-        </div>
-        {href ? (
-          <Link href={href} className="press flex items-center gap-0.5 text-[12px] font-medium text-muted">
-            Details
-            <IconChevronRight size={15} />
-          </Link>
-        ) : null}
-      </div>
-      <BarChart
-        data={metrics.map((m) => ({
-          key: m.date,
-          label: dayLetter(m.date),
-          value: m[metric],
-          target: m[targetKey],
-          highlight: startOfWeek(m.date) === startOfWeek(selected) ? m.date === selected : false,
-        }))}
-        onSelect={onSelect}
-      />
     </Card>
   );
 }

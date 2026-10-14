@@ -6,7 +6,6 @@ import { useStore } from "@/lib/store";
 import {
   addDays,
   dayLetter,
-  dayShort,
   glucoseStatus,
   num,
   oneDecimal,
@@ -16,6 +15,7 @@ import {
   weekDays,
 } from "@/lib/format";
 import {
+  BarChart,
   BarSparkline,
   Card,
   CircleButton,
@@ -141,14 +141,17 @@ export default function TrackPage() {
               </Tag>
             ))}
           </div>
-          <MetricBars
+          <BarChart
+            height={118}
+            today={today}
+            onSelect={setSelected}
             data={weekMetrics.map((m) => ({
-              date: m.date,
+              key: m.date,
+              label: dayLetter(m.date),
               value: m[metric],
               target: metricChips.find((c) => c.key === metric)?.target ?? 1,
+              highlight: m.date === selected,
             }))}
-            selected={selected}
-            onSelect={setSelected}
           />
           <div className="mt-3 grid grid-cols-2 gap-3">
             {metricChips.map((m) => (
@@ -304,54 +307,3 @@ export default function TrackPage() {
     </div>
   );
 }
-
-function MetricBars({
-  data,
-  selected,
-  onSelect,
-}: {
-  data: { date: string; value: number; target: number }[];
-  selected: string;
-  onSelect: (iso: string) => void;
-}) {
-  const max = Math.max(...data.map((d) => Math.max(d.value, d.target)), 1);
-  return (
-    <div className="flex items-end justify-between gap-2">
-      {data.map((d, i) => {
-        const h = Math.max(4, (d.value / max) * 118);
-        const targetH = Math.max(6, (d.target / max) * 118);
-        const active = d.date === selected;
-        const percent = Math.round((d.value / d.target) * 100);
-        return (
-          <button
-            key={d.date}
-            type="button"
-            onClick={() => onSelect(d.date)}
-            className="press flex flex-1 flex-col items-center gap-1.5"
-            aria-label={`${dayShort(d.date)} ${percent}% of target`}
-          >
-            <span className={`text-[11px] font-semibold ${active ? "text-lime-dark" : "text-muted"}`}>
-              {percent}%
-            </span>
-            <span className="relative flex w-full items-end justify-center" style={{ height: 118 }}>
-              <span
-                className="hatch absolute bottom-0 w-[70%] max-w-[24px] rounded-t-[8px]"
-                style={{ height: targetH }}
-              />
-              <span
-                className={`anim-rise absolute bottom-0 w-[70%] max-w-[24px] rounded-t-[8px] ${
-                  active ? "bg-lime-dark" : "bg-lime-tint"
-                }`}
-                style={{ height: h, animationDelay: `${i * 55}ms` }}
-              />
-            </span>
-            <span className={`text-[11px] ${active ? "font-bold text-ink" : "font-medium text-muted"}`}>
-              {dayLetter(d.date)}
-            </span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-

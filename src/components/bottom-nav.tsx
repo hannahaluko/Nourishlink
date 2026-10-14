@@ -9,7 +9,6 @@ import {
   IconCart,
   IconGrid,
   IconNote,
-  IconPlus,
   IconScan,
   IconSearch,
   IconUser,

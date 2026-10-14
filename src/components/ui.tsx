@@ -396,6 +396,7 @@ export function BarChart({
   className = "",
   showTarget = true,
   onSelect,
+  today,
 }: {
   data: { key: string; label: string; value: number; target?: number; caption?: string; highlight?: boolean }[];
   height?: number;
@@ -403,6 +404,8 @@ export function BarChart({
   className?: string;
   showTarget?: boolean;
   onSelect?: (key: string) => void;
+  /** ISO date for today — later days render as "not yet logged" instead of 0%. */
+  today?: string;
 }) {
   const max = Math.max(...data.map((d) => Math.max(d.target ?? 0, d.value, 1)));
   const labelId = useId();
@@ -413,7 +416,8 @@ export function BarChart({
         {data.map((d, i) => {
           const h = Math.max(4, (d.value / max) * height);
           const targetH = d.target ? Math.max(6, (d.target / max) * height) : 0;
-          const percent = d.target ? Math.round((d.value / d.target) * 100) : null;
+          const isFuture = today ? d.key > today : false;
+          const percent = d.target && !isFuture ? Math.round((d.value / d.target) * 100) : null;
           return (
             <button
               key={d.key}

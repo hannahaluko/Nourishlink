@@ -31,6 +31,7 @@ import {
 } from "@/components/log-sheets";
 import {
   Avatar,
+  BarChart,
   Card,
   CircleButton,
   IconTile,
@@ -92,6 +93,10 @@ export default function ClientDashboard() {
   /* Greeting depends on the viewer's clock — set after mount to keep SSR stable. */
   const [greeting, setGreeting] = useState("Hello");
   useEffect(() => setGreeting(greetingFor(new Date().getHours())), []);
+
+  const targetKey = (
+    { steps: "stepsTarget", kcal: "kcalTarget", water: "waterTarget", exerciseMin: "exerciseTarget" } as const
+  )[metric];
 
   const met: { key: "steps" | "kcal" | "water" | "exerciseMin"; label: string; tone: "orange" | "amber" | "blue" | "teal" }[] = [
     { key: "steps", label: "Steps", tone: "orange" },
@@ -181,11 +186,17 @@ export default function ClientDashboard() {
             ))}
           </div>
 
-          <MiniWeekBars
-            metrics={weekMetrics}
-            metric={metric}
-            selected={selected}
+          <BarChart
+            height={112}
+            today={today}
             onSelect={setSelected}
+            data={weekMetrics.map((m) => ({
+              key: m.date,
+              label: dayLetter(m.date),
+              value: m[metric],
+              target: m[targetKey],
+              highlight: m.date === selected,
+            }))}
           />
         </Card>
 
@@ -322,66 +333,6 @@ export default function ClientDashboard() {
       <LogGlucoseSheet open={sheet === "glucose"} onClose={() => setSheet(null)} date={selected} />
       <LogWeightSheet open={sheet === "weight"} onClose={() => setSheet(null)} date={today} />
       <LogWaterSheet open={sheet === "water"} onClose={() => setSheet(null)} />
-    </div>
-  );
-}
-
-/* ----------------------- compact chart used on the home ----------------------- */
-
-function MiniWeekBars({
-  metrics,
-  metric,
-  selected,
-  onSelect,
-}: {
-  metrics: ReturnType<ReturnType<typeof useStore>["metricFor"]>[];
-  metric: "steps" | "kcal" | "water" | "exerciseMin";
-  selected: string;
-  onSelect: (iso: string) => void;
-}) {
-  const targetKey = (
-    { steps: "stepsTarget", kcal: "kcalTarget", water: "waterTarget", exerciseMin: "exerciseTarget" } as const
-  )[metric];
-  const max = Math.max(...metrics.map((m) => Math.max(m[metric], m[targetKey])), 1);
-
-  return (
-    <div className="flex items-end justify-between gap-2 pt-1">
-      {metrics.map((m, i) => {
-        const h = Math.max(4, (m[metric] / max) * 112);
-        const targetH = Math.max(6, (m[targetKey] / max) * 112);
-        const active = m.date === selected;
-        const percent = m[targetKey] ? Math.round((m[metric] / m[targetKey]) * 100) : 0;
-        return (
-          <button
-            key={m.date}
-            type="button"
-            onClick={() => onSelect(m.date)}
-            className="press flex flex-1 flex-col items-center gap-1.5"
-            aria-label={`${m.date} ${percent}% of target`}
-          >
-            <span className={`text-[11px] font-semibold ${active ? "text-lime-dark" : "text-muted"}`}>
-              {percent}%
-            </span>
-            <span className="relative flex w-full items-end justify-center" style={{ height: 112 }}>
-              <span
-                className="hatch absolute bottom-0 w-[70%] max-w-[24px] rounded-t-[8px]"
-                style={{ height: targetH }}
-              />
-              <span
-                className={`anim-rise absolute bottom-0 w-[70%] max-w-[24px] rounded-t-[8px] ${
-                  active ? "bg-lime-dark" : "bg-lime-tint"
-                }`}
-                style={{ height: h, animationDelay: `${i * 55}ms` }}
-              />
-            </span>
-            <span
-              className={`text-[11px] ${active ? "font-bold text-ink" : "font-medium text-muted"}`}
-            >
-              {dayLetter(m.date)}
-            </span>
-          </button>
-        );
-      })}
     </div>
   );
 }
